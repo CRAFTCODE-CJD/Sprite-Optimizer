@@ -1,3 +1,141 @@
+# EN
+# Sprite Optimizer for Unreal Engine
+
+![UE Version](https://img.shields.io/badge/Unreal%20Engine-5.0+-blue.svg)
+
+**Sprite Optimizer** is a powerful plugin for Unreal Engine designed for 2D game developers. It provides a suite of tools to significantly reduce video memory usage and optimize performance by processing `PaperSprite` assets.
+
+[![Sprite Optimizer Demo](Images/Screen_01.png)](https://www.youtube.com/watch?v=39CtrqnF72Q)
+*A brief demonstration of the optimization and atlas creation process.*
+
+---
+
+## Table of Contents
+
+- [About The Project](#about-the-project)
+- [Key Features](#key-features)
+- [Installation](#installation)
+- [How To Use](#how-to-use)
+  - [Optimizing Sprites](#optimizing-sprites)
+  - [Creating Texture Atlases](#creating-texture-atlases)
+- [Project Settings](#project-settings)
+- [Technical Details](#technical-details)
+- [Contact](#contact)
+
+## About The Project
+
+This tool was born out of necessity. During my own development process, I frequently encountered problems for which there were no ready-made solutions online. This led me to create my own tools to solve two main challenges:
+
+1.  **Individual Sprite Optimization:** Automatically trims unused (transparent) areas of a texture while preserving the visual position of the **Pivot Point**.
+2.  **Atlas Creation:** Combines multiple sprites into a single texture (an atlas) to reduce the number of **draw calls** and further decrease memory consumption.
+
+## Key Features
+
+-   ✅ **Intelligent Texture Trimming:** Deletes excess transparent pixels around the image.
+-   ✅ **Pivot Point Preservation:** Automatically recalculates the `Pivot Point` so that the sprite remains in the same position in the game world after optimization.
+-   ✅ **Advanced Atlas Creation:** A powerful tool for packing multiple sprites into a single atlas.
+-   ✅ **Multiple Packing Algorithms:** Includes `Simple Grid`, `Best Fit`, and `MaxRects` for maximum space efficiency.
+-   ✅ **One-Click "Quick Atlas":** Creates an atlas with optimal default settings without needing to open a separate window.
+-   ✅ **Visual Preview:** Allows you to see what the atlas will look like before you create it.
+-   ✅ **Flexible Settings:** Full control over the process through dedicated tool windows and Project Settings.
+-   ✅ **Full Editor Integration:** All features are accessible via the context menu in the **Content Browser**.
+
+## Installation
+
+1.  Copy the `SpriteOptimizer` folder into your project's `Plugins` directory. (If a `Plugins` folder doesn't exist, create one in your project's root).
+2.  Restart the Unreal Engine editor.
+3.  The engine will prompt you to compile the plugin if necessary. Agree and wait for it to finish.
+4.  The plugin is now ready to use!
+
+## How To Use
+
+All plugin features are available from the context menu that appears when you right-click on `UPaperSprite` assets in the **Content Browser**.
+
+### Optimizing Sprites
+
+This feature is ideal for sprites with a large amount of empty space around the main image.
+
+1.  **Select** one or more sprites in the **Content Browser**.
+2.  Right-click and choose **🚀 Optimize Sprite(s)**.
+3.  The **Sprite Optimization** window will open.
+
+#### Sprite Optimization Window
+
+![Optimization Window Screenshot](Images/Screen_02.png)
+
+| Setting             | Description                                                                                               |
+| :------------------ | :-------------------------------------------------------------------------------------------------------- |
+| **Material**        | Allows you to select the material that will be applied to the new, optimized sprite.                      |
+| **Pixels Per Unit** | Sets the sprite's scale in the game world.                                                                |
+| **Padding**         | The number of pixels that will be added as a border around the trimmed image.                             |
+| **🚀 Optimize Selected** | Starts the optimization process for all sprites checked in the list. |
+
+After optimization, new assets with the `_Optimized` suffix will be created in an `Optimized` folder next to the original files.
+
+### Creating Texture Atlases
+
+Combining sprites into an atlas is one of the most effective ways to optimize 2D graphics.
+
+1.  **Select** two or more sprites in the **Content Browser**.
+2.  Right-click. You will see two new options:
+
+#### ⚡ Quick Atlas
+
+> Creates an atlas in one click using the most optimal default settings (`Best Fit` algorithm, automatic sprite optimization before packing). This is the fastest way to get a great result.
+
+#### 🎨 Create Atlas from Sprites
+
+> Opens the advanced **Create Sprite Atlas** window, where you can fine-tune every aspect of the atlas creation.
+
+#### Create Sprite Atlas Window
+
+![Atlas Creation Window Screenshot](Images/Screen_03.png)
+
+**Atlas Settings:**
+
+| Setting          | Description                                                                                                                                           |
+| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Name**         | The name for your new atlas asset.                                                                                                                    |
+| **Max Size**     | The maximum allowed resolution for the atlas texture (e.g., 2048x2048).                                                                              |
+| **Algorithm**    | The algorithm used for packing sprites. **Best Fit** is recommended for most cases.                                                                   |
+| **Optimize First** | **(Recommended)** If enabled, the plugin first optimizes each sprite individually before packing them. This yields the maximum space savings. |
+
+**Actions:**
+
+| Button             | Description                                                                                             |
+| :----------------- | :------------------------------------------------------------------------------------------------------ |
+| **🔍 Analyze**     | Analyzes the current settings and shows what the final atlas size and memory savings will be.             |
+| **👁️ Preview**     | Becomes active after analysis. Opens a window that visually shows how the sprites will be laid out.       |
+| **🎨 Create Atlas** | Starts the process of creating the atlas texture and all associated sprite assets.                        |
+
+## Project Settings
+
+You can configure the plugin's default behavior in **Edit -> Project Settings -> Plugins -> Sprite Optimizer**.
+
+| Setting                         | Description                                                                               |
+| :------------------------------ | :---------------------------------------------------------------------------------------- |
+| **Default Material**            | The default material for all optimized sprites.                                           |
+| **Default Padding**             | The default padding in pixels.                                                            |
+| **Minimum Savings For Auto Select** | The minimum saving percentage required for a sprite to be selected with the "Best" button. |
+| **Optimized Assets Path / Suffix** | Customize where optimized files are saved and what suffix they are given.                |
+
+## Technical Details
+
+#### How does Pivot Point Preservation work?
+
+When the source texture is trimmed, its coordinate system changes. The plugin calculates the new pivot position relative to the top-left corner of the *trimmed* area and sets this value in the `Custom Pivot Point` mode. As a result, even though the texture and its dimensions have changed, the sprite remains visually in the same place in the game world.
+
+#### Atlas Packing Algorithms
+
+*   **Simple Grid:** Arranges sprites in a simple grid. Fast, but can be inefficient.
+*   **Best Fit:** Finds the best available empty space for each sprite. A great balance between speed and efficiency.
+*   **MaxRects:** The most complex algorithm that tracks all free rectangles to achieve the highest packing density.
+
+## Contact
+
+Project Link: [https://boosty.to/channel-jonathan-developer](https://boosty.to/channel-jonathan-developer)
+
+# RU
 # Sprite Optimizer for Unreal Engine
 
 <!-- Добавьте сюда бейджи, если хотите, например, версию UE или лицензию -->
@@ -5,8 +143,7 @@
 
 **Sprite Optimizer** — это мощный плагин для Unreal Engine, предназначенный для разработчиков 2D-игр. Он предоставляет набор инструментов для значительного сокращения использования видеопамяти и оптимизации производительности путем обработки ассетов `PaperSprite`.
 
-[<!-- ЗАМЕНИТЕ ЭТО НА КАЧЕСТВЕННУЮ GIF-АНИМАЦИЮ, ДЕМОНСТРИРУЮЩУЮ ВАШ ПЛАГИН В ДЕЙСТВИИ -->
-![Sprite Optimizer Demo]([Images/Screen_01.png](https://www.youtube.com/watch?v=39CtrqnF72Q))
+[![Sprite Optimizer Demo](Images/Screen_01.png)
 *Краткая демонстрация процесса оптимизации и создания атласа.*](https://www.youtube.com/watch?v=39CtrqnF72Q)
 
 ---
@@ -21,7 +158,6 @@
   - [Создание текстурных атласов](#создание-текстурных-атласов)
 - [Настройки проекта](#настройки-проекта)
 - [Технические детали](#технические-детали)
-- [Лицензия](#лицензия)
 - [Контакты](#контакты)
 
 ## О проекте

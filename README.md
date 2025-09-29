@@ -6,7 +6,7 @@
 **Sprite Optimizer** — это мощный плагин для Unreal Engine, предназначенный для разработчиков 2D-игр. Он предоставляет набор инструментов для значительного сокращения использования видеопамяти и оптимизации производительности путем обработки ассетов `PaperSprite`.
 
 [<!-- ЗАМЕНИТЕ ЭТО НА КАЧЕСТВЕННУЮ GIF-АНИМАЦИЮ, ДЕМОНСТРИРУЮЩУЮ ВАШ ПЛАГИН В ДЕЙСТВИИ -->
-![Sprite Optimizer Demo GIF]([Images/Screen_01](https://www.youtube.com/watch?v=39CtrqnF72Q))
+![Sprite Optimizer Demo]([Images/Screen_01.png](https://www.youtube.com/watch?v=39CtrqnF72Q))
 *Краткая демонстрация процесса оптимизации и создания атласа.*](https://www.youtube.com/watch?v=39CtrqnF72Q)
 
 ---
@@ -64,7 +64,7 @@
 #### Окно Sprite Optimization
 
 <!-- ЗАМЕНИТЕ ЭТО НА СКРИНШОТ ОКНА ОПТИМИЗАЦИИ -->
-![Optimization Window Screenshot](Images/Screen_02)
+![Optimization Window Screenshot](Images/Screen_02.png)
 
 | Настройка           | Описание                                                                                               |
 | :------------------ | :----------------------------------------------------------------------------------------------------- |
@@ -93,7 +93,7 @@
 #### Окно Create Sprite Atlas
 
 <!-- ЗАМЕНИТЕ ЭТО НА СКРИНШОТ ОКНА СОЗДАНИЯ АТЛАСА -->
-![Atlas Creation Window Screenshot](Images/Screen_03)
+![Atlas Creation Window Screenshot](Images/Screen_03.png)
 
 **Настройки атласа:**
 

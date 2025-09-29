@@ -1,6 +1,7 @@
 # EN
 # Sprite Optimizer for Unreal Engine
 
+![UE Version](Images/Icon128.png)
 ![UE Version](https://img.shields.io/badge/Unreal%20Engine-5.0+-blue.svg)
 
 **Sprite Optimizer** is a powerful plugin for Unreal Engine designed for 2D game developers. It provides a suite of tools to significantly reduce video memory usage and optimize performance by processing `PaperSprite` assets.
@@ -138,7 +139,7 @@ Project Link: [https://boosty.to/channel-jonathan-developer](https://boosty.to/c
 # RU
 # Sprite Optimizer for Unreal Engine
 
-<!-- Добавьте сюда бейджи, если хотите, например, версию UE или лицензию -->
+![UE Version](Images/Icon128.png)
 ![UE Version](https://img.shields.io/badge/Unreal%20Engine-5.0+-blue.svg)
 
 **Sprite Optimizer** — это мощный плагин для Unreal Engine, предназначенный для разработчиков 2D-игр. Он предоставляет набор инструментов для значительного сокращения использования видеопамяти и оптимизации производительности путем обработки ассетов `PaperSprite`.

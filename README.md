@@ -1,277 +1,350 @@
-# EN
 # Sprite Optimizer for Unreal Engine
 
-![UE Version](Images/Icon128.png)
-![UE Version](https://img.shields.io/badge/Unreal%20Engine-5.0+-blue.svg)
+<p align="center">
+  <img src="Images/Icon128.png" alt="Plugin Icon" width="64">
+</p>
 
-**Sprite Optimizer** is a powerful plugin for Unreal Engine designed for 2D game developers. It provides a suite of tools to significantly reduce video memory usage and optimize performance by processing `PaperSprite` assets.
+<p align="center">
+  <img src="https://img.shields.io/badge/Unreal%20Engine-5.4+-blue.svg" alt="UE Version">
+  <img src="https://img.shields.io/badge/License-Commercial-green.svg" alt="License">
+  <img src="https://img.shields.io/badge/Compression-BC7-orange.svg" alt="BC7">
+</p>
 
-[![Sprite Optimizer Demo](Images/Screen_01.png)](https://www.youtube.com/watch?v=39CtrqnF72Q)
-*A brief demonstration of the optimization and atlas creation process.*
+**Sprite Optimizer** is a professional Paper2D sprite and texture optimization plugin for Unreal Engine 5. It provides a complete suite of tools for trimming transparent regions, packing textures into atlases, creating Material Instances, and reverse-engineering existing atlases.
 
 ---
 
 ## Table of Contents
 
-- [About The Project](#about-the-project)
 - [Key Features](#key-features)
 - [Installation](#installation)
-- [How To Use](#how-to-use)
-  - [Optimizing Sprites](#optimizing-sprites)
-  - [Creating Texture Atlases](#creating-texture-atlases)
+- [Getting Started](#getting-started)
+- [Optimize Mode](#optimize-mode)
+- [Atlas Mode](#atlas-mode)
+- [Import Atlas](#import-atlas)
+- [Quick Atlas](#quick-atlas)
+- [Export & Output](#export--output)
+- [Keyboard Shortcuts & Mouse Controls](#keyboard-shortcuts--mouse-controls)
 - [Project Settings](#project-settings)
 - [Technical Details](#technical-details)
-- [Contact](#contact)
-
-## About The Project
-
-This tool was born out of necessity. During my own development process, I frequently encountered problems for which there were no ready-made solutions online. This led me to create my own tools to solve two main challenges:
-
-1.  **Individual Sprite Optimization:** Automatically trims unused (transparent) areas of a texture while preserving the visual position of the **Pivot Point**.
-2.  **Atlas Creation:** Combines multiple sprites into a single texture (an atlas) to reduce the number of **draw calls** and further decrease memory consumption.
-
-## Key Features
-
--   ✅ **Intelligent Texture Trimming:** Deletes excess transparent pixels around the image.
--   ✅ **Pivot Point Preservation:** Automatically recalculates the `Pivot Point` so that the sprite remains in the same position in the game world after optimization.
--   ✅ **Advanced Atlas Creation:** A powerful tool for packing multiple sprites into a single atlas.
--   ✅ **Multiple Packing Algorithms:** Includes `Simple Grid`, `Best Fit`, and `MaxRects` for maximum space efficiency.
--   ✅ **One-Click "Quick Atlas":** Creates an atlas with optimal default settings without needing to open a separate window.
--   ✅ **Visual Preview:** Allows you to see what the atlas will look like before you create it.
--   ✅ **Flexible Settings:** Full control over the process through dedicated tool windows and Project Settings.
--   ✅ **Full Editor Integration:** All features are accessible via the context menu in the **Content Browser**.
-
-## Installation
-
-1.  Copy the `SpriteOptimizer` folder into your project's `Plugins` directory. (If a `Plugins` folder doesn't exist, create one in your project's root).
-2.  Restart the Unreal Engine editor.
-3.  The engine will prompt you to compile the plugin if necessary. Agree and wait for it to finish.
-4.  The plugin is now ready to use!
-
-## How To Use
-
-All plugin features are available from the context menu that appears when you right-click on `UPaperSprite` assets in the **Content Browser**.
-
-### Optimizing Sprites
-
-This feature is ideal for sprites with a large amount of empty space around the main image.
-
-1.  **Select** one or more sprites in the **Content Browser**.
-2.  Right-click and choose **🚀 Optimize Sprite(s)**.
-3.  The **Sprite Optimization** window will open.
-
-#### Sprite Optimization Window
-
-![Optimization Window Screenshot](Images/Screen_02.png)
-
-| Setting             | Description                                                                                               |
-| :------------------ | :-------------------------------------------------------------------------------------------------------- |
-| **Material**        | Allows you to select the material that will be applied to the new, optimized sprite.                      |
-| **Pixels Per Unit** | Sets the sprite's scale in the game world.                                                                |
-| **Padding**         | The number of pixels that will be added as a border around the trimmed image.                             |
-| **🚀 Optimize Selected** | Starts the optimization process for all sprites checked in the list. |
-
-After optimization, new assets with the `_Optimized` suffix will be created in an `Optimized` folder next to the original files.
-
-### Creating Texture Atlases
-
-Combining sprites into an atlas is one of the most effective ways to optimize 2D graphics.
-
-1.  **Select** two or more sprites in the **Content Browser**.
-2.  Right-click. You will see two new options:
-
-#### ⚡ Quick Atlas
-
-> Creates an atlas in one click using the most optimal default settings (`Best Fit` algorithm, automatic sprite optimization before packing). This is the fastest way to get a great result.
-
-#### 🎨 Create Atlas from Sprites
-
-> Opens the advanced **Create Sprite Atlas** window, where you can fine-tune every aspect of the atlas creation.
-
-#### Create Sprite Atlas Window
-
-![Atlas Creation Window Screenshot](Images/Screen_03.png)
-
-**Atlas Settings:**
-
-| Setting          | Description                                                                                                                                           |
-| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**         | The name for your new atlas asset.                                                                                                                    |
-| **Max Size**     | The maximum allowed resolution for the atlas texture (e.g., 2048x2048).                                                                              |
-| **Algorithm**    | The algorithm used for packing sprites. **Best Fit** is recommended for most cases.                                                                   |
-| **Optimize First** | **(Recommended)** If enabled, the plugin first optimizes each sprite individually before packing them. This yields the maximum space savings. |
-
-**Actions:**
-
-| Button             | Description                                                                                             |
-| :----------------- | :------------------------------------------------------------------------------------------------------ |
-| **🔍 Analyze**     | Analyzes the current settings and shows what the final atlas size and memory savings will be.             |
-| **👁️ Preview**     | Becomes active after analysis. Opens a window that visually shows how the sprites will be laid out.       |
-| **🎨 Create Atlas** | Starts the process of creating the atlas texture and all associated sprite assets.                        |
-
-## Project Settings
-
-You can configure the plugin's default behavior in **Edit -> Project Settings -> Plugins -> Sprite Optimizer**.
-
-| Setting                         | Description                                                                               |
-| :------------------------------ | :---------------------------------------------------------------------------------------- |
-| **Default Material**            | The default material for all optimized sprites.                                           |
-| **Default Padding**             | The default padding in pixels.                                                            |
-| **Minimum Savings For Auto Select** | The minimum saving percentage required for a sprite to be selected with the "Best" button. |
-| **Optimized Assets Path / Suffix** | Customize where optimized files are saved and what suffix they are given.                |
-
-## Technical Details
-
-#### How does Pivot Point Preservation work?
-
-When the source texture is trimmed, its coordinate system changes. The plugin calculates the new pivot position relative to the top-left corner of the *trimmed* area and sets this value in the `Custom Pivot Point` mode. As a result, even though the texture and its dimensions have changed, the sprite remains visually in the same place in the game world.
-
-#### Atlas Packing Algorithms
-
-*   **Simple Grid:** Arranges sprites in a simple grid. Fast, but can be inefficient.
-*   **Best Fit:** Finds the best available empty space for each sprite. A great balance between speed and efficiency.
-*   **MaxRects:** The most complex algorithm that tracks all free rectangles to achieve the highest packing density.
-
-## Contact
-
-Project Link: [https://boosty.to/channel-jonathan-developer](https://boosty.to/channel-jonathan-developer)
-
-# RU
-# Sprite Optimizer for Unreal Engine
-
-![UE Version](Images/Icon128.png)
-![UE Version](https://img.shields.io/badge/Unreal%20Engine-5.0+-blue.svg)
-
-**Sprite Optimizer** — это мощный плагин для Unreal Engine, предназначенный для разработчиков 2D-игр. Он предоставляет набор инструментов для значительного сокращения использования видеопамяти и оптимизации производительности путем обработки ассетов `PaperSprite`.
-
-[![Sprite Optimizer Demo](Images/Screen_01.png)
-*Краткая демонстрация процесса оптимизации и создания атласа.*](https://www.youtube.com/watch?v=39CtrqnF72Q)
 
 ---
 
-## Оглавление
+## Key Features
 
-- [О проекте](#о-проекте)
-- [Ключевые возможности](#ключевые-возможности)
-- [Установка](#установка)
-- [Как использовать](#как-использовать)
-  - [Оптимизация спрайтов](#оптимизация-спрайтов)
-  - [Создание текстурных атласов](#создание-текстурных-атласов)
-- [Настройки проекта](#настройки-проекта)
-- [Технические детали](#технические-детали)
-- [Контакты](#контакты)
+- **Intelligent Texture Trimming** — automatically removes transparent pixels with configurable alpha threshold
+- **Pivot Point Preservation** — recalculates pivot so sprites maintain their visual position after trimming
+- **5 Packing Algorithms** — Max Rects, Bin Pack, Fixed Grid, Tile, with multi-heuristic optimization
+- **Interactive Atlas Editor** — drag, resize, rotate, repack items on a visual canvas
+- **Import Atlas** — reverse-engineer existing atlases from Sprites, Material Instances, or auto-detect regions
+- **Grid Slice Dialog** — slice any texture into regions with Auto-detect (flood fill) or Grid mode
+- **Material Instance Generation** — create MI assets with UV-offset parameters for atlas regions
+- **Multi-Pack** — automatically creates additional atlas pages when items don't fit
+- **Memory Safety** — RAM usage estimation with warning dialogs before heavy operations
+- **Detailed Progress Bars** — 4-phase progress tracking so you always know what's happening
+- **BC7 Compression** — all exported textures use high-quality BC7 compression
+- **Drag & Drop** — add textures from Content Browser directly into the editor
+- **Full Undo/Redo** — up to 50 undo levels for all canvas operations
 
-## О проекте
+---
 
-Этот инструмент был рожден из-за необходимости. В процессе собственной разработки я часто сталкиваюсь с проблемами, для которых нет готовых решений в интернете, что и привело меня к созданию собственных инструментов для решения двух основных задач:
+## Installation
 
-1.  **Оптимизация отдельных спрайтов:** Автоматически обрезает неиспользуемые (прозрачные) области текстуры, сохраняя при этом визуальное положение **Pivot Point**.
-2.  **Создание атласов:** Объединяет несколько спрайтов в единую текстуру (атлас), чтобы уменьшить количество вызовов отрисовки (**draw calls**) и еще больше сократить потребление памяти.
+1. Copy the `SpriteOptimizer` folder into your project's `Plugins` directory
+2. Restart the Unreal Engine editor
+3. The plugin will compile automatically on first launch
+4. Access all features via right-click context menu in Content Browser
 
-## Ключевые возможности
+---
 
--   ✅ **Интеллектуальная обрезка текстур:** Удаляет лишние прозрачные пиксели вокруг изображения.
--   ✅ **Сохранение Pivot Point:** Автоматически пересчитывает `Pivot Point` так, что после оптимизации спрайт остается на том же месте в игровом мире.
--   ✅ **Создание атласов:** Продвинутый инструмент для упаковки множества спрайтов в один атлас.
--   ✅ **Несколько алгоритмов упаковки:** Включает `Simple Grid`, `Best Fit` и `MaxRects` для максимальной эффективности использования пространства.
--   ✅ **"Быстрый Атлас" в один клик:** Создает атлас с оптимальными настройками без необходимости открывать отдельное окно.
--   ✅ **Визуальный предпросмотр:** Позволяет увидеть, как будет выглядеть атлас, еще до его создания.
--   ✅ **Гибкие настройки:** Полный контроль над процессом через окна инструментов и настройки проекта.
--   ✅ **Полная интеграция с редактором:** Все функции доступны через контекстное меню в **Content Browser**.
+## Getting Started
 
-## Установка
+Select textures or sprites in the **Content Browser**, right-click, and choose from the **Sprite Optimizer** section:
 
-1.  Скопируйте папку `SpriteOptimizer` в директорию `Plugins` вашего проекта. (Если папки `Plugins` нет, создайте ее в корневой папке проекта).
-2.  Перезапустите редактор Unreal Engine.
-3.  Движок предложит скомпилировать плагин, если это необходимо. Согласитесь и дождитесь завершения.
-4.  Плагин готов к использованию!
+<p align="center">
+  <img src="Images/ContentBrowser_RMB_Action.png" alt="RMB Menu — Multiple Textures" width="320">
+  &nbsp;&nbsp;&nbsp;
+  <img src="Images/ContentBrowser_RMB_Action_02.png" alt="RMB Menu — Single Texture" width="320">
+</p>
 
-## Как использовать
+*Left: Multiple textures selected (Optimize, Atlas, Quick Atlas, Analyze). Right: Single texture selected (also shows Import Atlas).*
 
-Все функции плагина доступны из контекстного меню, которое появляется при нажатии правой кнопкой мыши на ассетах `UPaperSprite` в **Content Browser**.
+---
 
-### Оптимизация спрайтов
+## Optimize Mode
 
-Эта функция идеально подходит для спрайтов с большим количеством пустого пространства вокруг основного изображения.
+Trim transparent pixels from individual textures while preserving sprite pivot positions.
 
-1.  **Выберите** один или несколько спрайтов в **Content Browser**.
-2.  Нажмите правую кнопку мыши и выберите **🚀 Optimize Sprite(s)**.
-3.  Откроется окно **Sprite Optimization**.
+<img src="Images/Optimize_01.png" alt="Optimize — Before" width="700">
 
-#### Окно Sprite Optimization
+*Optimize editor before analysis — select items and configure settings.*
 
-<!-- ЗАМЕНИТЕ ЭТО НА СКРИНШОТ ОКНА ОПТИМИЗАЦИИ -->
-![Optimization Window Screenshot](Images/Screen_02.png)
+<img src="Images/Optimize_02.png" alt="Optimize — After" width="700">
 
-| Настройка           | Описание                                                                                               |
-| :------------------ | :----------------------------------------------------------------------------------------------------- |
-| **Material**        | Позволяет выбрать материал, который будет применен к новому, оптимизированному спрайту.                 |
-| **Pixels Per Unit** | Устанавливает масштаб спрайта в игровом мире.                                                          |
-| **Padding**         | Количество пикселей, которое будет добавлено в качестве отступа вокруг обрезанного изображения.         |
-| **🚀 Optimize Selected** | Начинает процесс оптимизации для всех спрайтов, отмеченных галочкой в списке. |
+*After analysis: savings percentage, original vs optimized sizes, memory estimates. Yellow = good savings, orange = negative (padding inflated size).*
 
-После оптимизации в папке `Optimized` (рядом с исходными файлами) будут созданы новые ассеты с суффиксом `_Optimized`.
+Switch between modes:
 
-### Создание текстурных атласов
+<img src="Images/ToolBar_01.png" alt="Mode Toggle" width="180">
 
-Объединение спрайтов в атлас — один из самых эффективных способов оптимизации 2D-графики.
+---
 
-1.  **Выберите** два или более спрайта в **Content Browser**.
-2.  Нажмите правую кнопку мыши. У вас появятся две новые опции:
+## Atlas Mode
 
-#### ⚡ Quick Atlas (Быстрый Атлас)
+Pack multiple textures into optimized atlas sheets.
 
-> Создает атлас в один клик, используя самые оптимальные настройки по умолчанию (алгоритм `Best Fit`, автоматическая оптимизация спрайтов перед упаковкой). Это самый быстрый способ получить отличный результат.
+### Atlas Editor Overview
 
-#### 🎨 Create Atlas from Sprites (Создать Атлас)
+<img src="Images/Atlas_01.png" alt="Atlas Editor" width="800">
 
-> Открывает продвинутое окно **Create Sprite Atlas**, где вы можете тонко настроить каждый аспект создания атласа.
+*Items panel (left) — check/uncheck, search, filter Placed/Unplaced. Viewport (center) — interactive canvas. Settings (right) — algorithm, size, output options.*
 
-#### Окно Create Sprite Atlas
+### Toolbar
 
-<!-- ЗАМЕНИТЕ ЭТО НА СКРИНШОТ ОКНА СОЗДАНИЯ АТЛАСА -->
-![Atlas Creation Window Screenshot](Images/Screen_03.png)
+<img src="Images/AtlasToolBar_01.png" alt="Atlas Toolbar" width="700">
 
-**Настройки атласа:**
+| Button | Shortcut | Description |
+|--------|----------|-------------|
+| Analyze | `F5` | Run packing algorithm and display preview |
+| Create Atlas | `Ctrl+Shift+Enter` | Export atlas texture, sprites, and material instances |
+| Repack | `Ctrl+R` | Re-run packing on current page items |
+| Place All | — | Place all unplaced items on the current page |
+| Import Atlas | — | Import an existing atlas texture |
+| Fit | `Home` | Fit view to show entire atlas |
+| Grid | `G` | Toggle grid overlay |
+| Snap | `S` | Toggle snap-to-grid |
+| Free Move | `F` | Toggle free movement mode (no collision) |
 
-| Настройка        | Описание                                                                                                                                              |
-| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**         | Имя для вашего нового атласа.                                                                                                                         |
-| **Max Size**     | Максимально допустимое разрешение текстуры атласа (например, 2048x2048).                                                                             |
-| **Algorithm**    | Алгоритм упаковки спрайтов. **Best Fit** рекомендуется для большинства случаев.                                                                       |
-| **Optimize First** | **(Рекомендуется)** Если включено, плагин сначала оптимизирует каждый спрайт, а уже потом упакует их. Это дает максимальную экономию места. |
+### Packing Algorithms
 
-**Действия:**
+| Algorithm | Best For |
+|-----------|----------|
+| **Max Rects** | General-purpose. Multi-heuristic (5 heuristics × 4 sort orders). Industry standard. |
+| **Bin Pack** | Anchor-point algorithm. Good for diverse sizes. |
+| **Fixed Grid** | Uniform N×M grid. Best for tile-based games. |
+| **Tile (Simple)** | Horizontal/vertical strip. Best for linear layouts. |
 
-| Кнопка             | Описание                                                                                             |
-| :----------------- | :--------------------------------------------------------------------------------------------------- |
-| **🔍 Analyze**     | Анализирует настройки и показывает, какого размера получится атлас и сколько памяти вы сэкономите.     |
-| **👁️ Preview**     | После анализа эта кнопка становится активной. Открывает окно, где визуально показано расположение спрайтов. |
-| **🎨 Create Atlas** | Начинает процесс создания атласа и всех необходимых ассетов.                                          |
+### Canvas Interaction
 
-## Настройки проекта
+<img src="Images/Atlas_02.png" alt="Atlas Packed" width="700">
 
-Вы можете настроить поведение плагина по умолчанию в настройках проекта: **Edit -> Project Settings -> Plugins -> Sprite Optimizer**.
+*All textures packed with Optimize First + Allow Rotation. Names shown on each item.*
 
-| Настройка                        | Описание                                                                                      |
-| :------------------------------- | :-------------------------------------------------------------------------------------------- |
-| **Default Material**             | Материал по умолчанию для всех оптимизированных спрайтов.                                     |
-| **Default Padding**              | Отступ в пикселях по умолчанию.                                                               |
-| **Minimum Savings For Auto Select** | Минимальный процент экономии для автоматического выбора спрайтов по кнопке "Best".           |
-| **Optimized Assets Path / Suffix** | Позволяет настроить, куда сохранять оптимизированные файлы и какой суффикс им присваивать. |
+<img src="Images/Atlas_03.png" alt="Atlas Selection" width="700">
 
-## Технические детали
+*Multi-select with rubber band. Selected items highlighted with blue outline.*
 
-#### Как работает сохранение Pivot Point?
+### Multi-Pack
 
-Когда исходная текстура обрезается, ее система координат меняется. Плагин вычисляет новое положение пивота относительно левого верхнего угла *обрезанной* области и устанавливает его в режиме `Custom Pivot Point`. В результате, хотя текстура и ее размеры изменились, визуально в игровом мире спрайт остается на своем месте.
+<img src="Images/Atlas_Page.png" alt="Multi-Pack Pages" width="600">
 
-#### Алгоритмы упаковки атласа
+*Navigate between pages using the tab bar. Page 3 of 6 shown.*
 
-*   **Simple Grid:** Располагает спрайты в простой сетке. Быстро, но неэффективно.
-*   **Best Fit:** Ищет наилучшее свободное место для каждого спрайта. Отличный баланс между скоростью и эффективностью.
-*   **MaxRects:** Самый сложный алгоритм, который отслеживает все свободные прямоугольники для достижения максимальной плотности упаковки.
+### Collision Detection
 
-## Контакты
+<img src="Images/Collision_01.png" alt="Collision Warning" width="600">
 
-Ссылка на проект: [https://boosty.to/channel-jonathan-developer](https://boosty.to/channel-jonathan-developer)
+*Overlapping items shown with red outlines. "Collisions!" warning in status bar. Enable Free Move to allow overlaps.*
+
+### Drag & Drop
+
+Add textures dynamically — drag from Content Browser into the Items panel:
+
+<p align="center">
+  <img src="Images/DragImport_01.png" alt="Drag — In Progress" width="420">
+  <img src="Images/DragImport_02.png" alt="Drag — Result" width="420">
+</p>
+
+*Left: Dragging 7 textures into Items. Right: Items added as Unplaced — use Place All or Analyze to pack.*
+
+---
+
+## Import Atlas
+
+Reverse-engineer existing atlas textures back into individual editable items.
+
+Right-click on an atlas texture → **Import Atlas**.
+
+### From Sprites / Material Instances
+
+When Sprites or MI reference the atlas texture, a source selection dialog appears:
+
+<img src="Images/Slice_01.png" alt="Import Source Dialog" width="450">
+
+*Choose Sprites (Yes), Material Instances (No), or Cancel.*
+
+### Slice Texture Dialog
+
+When no metadata found, the **Slice Texture** dialog opens:
+
+#### Auto Mode — Flood-Fill Island Detection
+
+<img src="Images/Slice_02.png" alt="Slice — Auto Mode" width="600">
+
+*Yellow outlines = auto-detected regions by alpha transparency. Alpha Threshold configurable.*
+
+#### Grid Mode — Uniform Cell Slicing
+
+<img src="Images/Slice_04.png" alt="Slice — Grid Mode" width="600">
+
+*Grid mode with configurable Cell Width/Height, Margin, and Spacing.*
+
+#### Manual Editing
+
+<img src="Images/Slice_03.png" alt="Slice — Manual Edit" width="600">
+
+*Green = selected region. Orange with "R" = marked as rotated. Draw, delete, resize any region.*
+
+| Action | How |
+|--------|-----|
+| Select region | LMB click on region |
+| Draw new region | LMB drag on empty space |
+| Delete region | Select → `Del` |
+| Resize region | Drag edges/corners of selected |
+| Mark as rotated | Select → `R` (unrotates on export) |
+| Zoom / Pan | Mouse wheel / RMB or MMB drag |
+
+After **Slice**, textures are saved to a `Sliced/` subfolder and a new Atlas Editor opens with them.
+
+---
+
+## Quick Atlas
+
+Create an atlas in one click: select 2+ textures → right-click → **Quick Atlas**.
+
+Uses defaults from Project Settings (algorithm, size mode, padding, etc). Atlas created instantly in the same folder.
+
+---
+
+## Export & Output
+
+<img src="Images/ExportAssets_01.png" alt="Exported Assets" width="700">
+
+*Content Browser showing exported atlas texture, sprites, and material instances.*
+
+<img src="Images/ExportAssets_02.png" alt="MI UV Parameters" width="600">
+
+*Material Instance with pixel-based UV parameters: PixelX/Y, SizeW/H, AtlasW/H, UVRotation.*
+
+<img src="Images/Atlas_05.png" alt="Texture BC7" width="700">
+
+*Exported texture: BC7 compression, NoMipmaps, UI texture group.*
+
+### Output Options
+
+| Option | Description |
+|--------|-------------|
+| **Texture** | Always created — atlas texture with BC7 compression |
+| **Sprite** | PaperSprite assets with correct SourceUV and pivot |
+| **Material Instance** | MI with UV-offset parameters for UMG widgets |
+| **Preserve Position** | Adjust pivot to maintain visual position after trimming |
+| **Pad to x4** | Ensure dimensions are multiple of 4 for BC compression |
+
+---
+
+## Keyboard Shortcuts & Mouse Controls
+
+### Global Commands
+
+| Shortcut | Action |
+|----------|--------|
+| `F5` | Analyze (run packing / optimization) |
+| `Ctrl+Shift+Enter` | Create Atlas / Execute Optimize |
+| `Ctrl+R` | Repack current page |
+| `Ctrl+Z` | Undo |
+| `Ctrl+Y` | Redo |
+| `Ctrl+A` | Select all items on current page |
+
+### Canvas Navigation
+
+| Input | Action |
+|-------|--------|
+| `Mouse Wheel` | Zoom in/out |
+| `MMB Drag` | Pan viewport |
+| `RMB Drag` | Pan viewport (alternative) |
+| `Home` | Fit view to atlas |
+
+### Canvas Editing
+
+| Input | Action |
+|-------|--------|
+| `LMB Click` | Select item |
+| `Ctrl+LMB Click` | Toggle item in selection (add/remove) |
+| `LMB Drag` (on empty) | Rubber band selection |
+| `Ctrl+LMB Drag` | Additive rubber band (XOR toggle) |
+| `LMB Drag` (on item) | Move selected items |
+| `Shift+Drag` | **Axis lock** — constrain movement to horizontal OR vertical (auto-detects direction, shows magenta guide line) |
+| `Shift+Resize` | **Proportional resize** — constrain canvas resize to square proportions |
+| `Ctrl+Drag` | Force snap-to-grid (even if Snap toggle is off) |
+
+### Item Operations
+
+| Shortcut | Action |
+|----------|--------|
+| `R` | Rotate selected 90° clockwise |
+| `Del` | Remove selected from atlas (→ Unplaced) |
+
+### View Toggles
+
+| Shortcut | Action |
+|----------|--------|
+| `G` | Toggle grid overlay |
+| `S` | Toggle snap-to-grid |
+| `F` | Toggle free movement (disable collision) |
+| `P` | Toggle rulers |
+
+### Slice Dialog Controls
+
+| Input | Action |
+|-------|--------|
+| `LMB Click` | Select region |
+| `LMB Drag` (empty) | Draw new region |
+| `Del` | Delete selected region |
+| `R` | Toggle rotation mark on selected |
+| `Mouse Wheel` | Zoom |
+| `RMB / MMB Drag` | Pan |
+
+---
+
+## Memory Safety
+
+<img src="Images/Dialogue_01.png" alt="Memory Warning" width="450">
+
+*RAM estimation before heavy operations. Shows required vs available memory.*
+
+---
+
+## Project Settings
+
+Configure defaults in **Project Settings → Plugins → Sprite Optimizer**:
+
+<img src="Images/ProjectSettings_01.png" alt="Project Settings" width="700">
+
+| Category | Settings |
+|----------|----------|
+| **Optimization** | Default Pixels Per Unit, Padding, Alpha Threshold |
+| **Auto Selection** | Min Savings Threshold for auto-select |
+| **Quick Atlas** | Algorithm, Max Size, Size Mode, Padding, Optimize First, Allow Rotation, Auto Multi-Pack, Pad to x4, Preserve Position, Suffix |
+| **Material** | Default Sprite Material, Texture Parameter Name, Custom Parent Materials, Material Domain |
+| **Output** | Optimized/Atlas subfolder names, Optimized suffix |
+| **Workflow** | Show Detailed Logs, Show Notifications, Auto Refresh Content Browser |
+
+---
+
+## Technical Details
+
+| Property | Value |
+|----------|-------|
+| Engine Version | Unreal Engine 5.4+ |
+| Module Type | Editor Only (EditorNoCommandlet) |
+| Dependencies | Paper2D |
+| Platforms | Win64, Mac, Linux |
+| Compression | BC7 for all exported textures |
+| Max Atlas Size | Up to 8192×8192 (configurable) |
+| Packing Optimization | Multi-heuristic with aspect ratio scoring |
+| Progress Tracking | 4-phase progress bars for all heavy operations |
+| Undo System | 50-level undo/redo stack |
+
+---
+
+**Created by CRAFTCODE** | Sprite Optimizer v2.0

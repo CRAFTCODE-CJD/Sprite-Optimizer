@@ -11,9 +11,13 @@
   <img src="https://img.shields.io/badge/Compression-BC7-orange.svg" alt="BC7">
 </p>
 
+<p align="center">
+  <a href="https://www.fab.com/listings/d467cf90-8576-4aa9-b55d-285060a5d1bf"><b>▶ Get it on FAB Marketplace</b></a>
+</p>
+
 **Sprite Optimizer** is a professional Paper2D sprite and texture optimization plugin for Unreal Engine. It provides a complete suite of tools for trimming transparent regions, packing textures into atlases, creating Material Instances, and reverse-engineering existing atlases — all in a single interactive editor with full undo/redo support.
 
-> **Version 2.1** — Cross-engine release. Single unified source supports **Unreal Engine 4.27 and 5.0 through 5.7**. See [Changelog](#changelog) for details.
+> **Version 2.1** — Now works on **9 engine versions** (UE 4.27 and 5.0 through 5.7) from a single unified source. Adds the **Sprite Optimizer Project** asset for resumable editing sessions, faster project opening on large atlases, configurable **Preview Quality** setting for memory control, 16-bit normal map support, and several stability fixes. See [Changelog](#changelog) for details.
 
 ---
 
@@ -21,13 +25,14 @@
 
 - [Key Features](#key-features)
 - [Supported Engine Versions](#supported-engine-versions)
-- [Installation](#installation)
 - [Getting Started](#getting-started)
 - [Optimize Mode](#optimize-mode)
 - [Atlas Mode](#atlas-mode)
+- [Sprite Optimizer Project](#sprite-optimizer-project)
 - [Import Atlas](#import-atlas)
 - [Quick Atlas](#quick-atlas)
 - [Export & Output](#export--output)
+- [Preview Quality](#preview-quality)
 - [Keyboard Shortcuts & Mouse Controls](#keyboard-shortcuts--mouse-controls)
 - [Project Settings](#project-settings)
 - [Technical Details](#technical-details)
@@ -38,22 +43,24 @@
 
 ## Key Features
 
-- **Cross-Engine Support** — single source builds on UE 4.27 and 5.0–5.7 via a unified compatibility layer
-- **Lossless Preservation** — sprite pixels are never scaled, resampled, or filtered; output is 1:1 pixel-perfect
-- **Intelligent Texture Trimming** — automatically removes transparent pixels with configurable alpha threshold
-- **Pivot Point Preservation** — recalculates pivot so sprites maintain their visual position after trimming
-- **4 Packing Algorithms** — Max Rects (multi-heuristic), Bin Pack, Fixed Grid, Tile
-- **Interactive Atlas Editor** — drag items to reposition, toggle 90° rotation, multi-select, resize the target atlas page
-- **Import Atlas** — reverse-engineer existing atlases from Sprites, Material Instances, or auto-detect regions
-- **Grid Slice Dialog** — slice any texture into regions with Auto-detect (flood fill) or Grid mode
-- **Material Instance Generation** — create MI assets with pixel-based UV parameters (works in 3D and UMG)
-- **Multi-Pack** — automatically creates additional atlas pages when items don't fit
-- **Memory Safety** — RAM usage estimation with warning dialogs before heavy operations
-- **Detailed Progress Bars** — 4-phase progress tracking so you always know what's happening
-- **BC7 Compression** — all exported textures use high-quality BC7 compression with alpha
-- **Drag & Drop** — add textures from Content Browser directly into the editor
-- **Plugin-Bundled Icons** — consistent UI on every engine version (no engine-style dependencies)
-- **Full Undo/Redo** — up to 50 undo levels for all canvas operations
+- **Works on UE 4.27 and 5.0 through 5.7** — one plugin, every supported engine version
+- **Pixel-perfect output** — your sprites are never scaled, resampled, or filtered; what you put in is what comes out
+- **Automatic trimming** — removes transparent edges from textures with a configurable alpha threshold
+- **Pivot preservation** — trimmed sprites stay in the same visual position as before
+- **4 packing algorithms** — Max Rects, Bin Pack, Fixed Grid, Tile — pick the one that fits your project
+- **Interactive atlas editor** — drag items to reposition, rotate 90°, multi-select, resize the atlas page in real time
+- **Resumable sessions** 🆕 — save your editing session as an asset and reopen it later with one double-click
+- **Import existing atlases** — reverse-engineer an atlas back into individual editable items
+- **Slice any texture** — cut a texture into regions with auto-detect (flood fill) or grid mode
+- **Material Instances** — auto-generated with pixel-based UV parameters, works in both 3D and UMG
+- **Multi-page atlases** — automatically creates extra pages when items don't fit
+- **Normal maps & HDR** 🆕 — 16-bit sources and HDR textures now pack correctly
+- **Fast project loading** 🆕 — parallel pixel decompression speeds up reopening large atlases
+- **Preview Quality setting** 🆕 — control editor memory usage; no impact on final output
+- **Memory warnings** — before a heavy operation, you'll see how much RAM is needed
+- **BC7 compression** — high-quality compression with alpha for all exported textures
+- **Drag & drop** — pull textures from Content Browser straight into the editor
+- **50-level undo/redo** — experiment freely; take back any action
 
 ---
 
@@ -71,18 +78,13 @@
 | **UE 5.6** | ✅ Supported | |
 | **UE 5.7** | ✅ Supported | Development baseline |
 
-All versions receive identical features — cross-engine compatibility is handled internally via `SpriteOptimizerCompat.h`, no per-version branches in user-facing code.
+All versions receive identical features — cross-engine compatibility is handled internally, no per-version branches in user-facing code.
 
----
+<p align="center">
+  <img src="Images/CrossEngine_UE427.png" alt="Plugin running in UE 4.27" width="800">
+</p>
 
-## Installation
-
-1. Copy the `SpriteOptimizer` folder into your project's `Plugins` directory
-2. Restart the Unreal Engine editor
-3. The plugin will compile automatically on first launch (source-only distribution — engine compiles on your side)
-4. Access all features via right-click context menu in Content Browser
-
-Alternative: install from **FAB Marketplace** — the plugin will be installed and compiled by the engine automatically.
+*Plugin running in **UE 4.27** — same Atlas Editor, same workflow, same source code. No separate build for older engine versions.*
 
 ---
 
@@ -103,6 +105,10 @@ Select textures or sprites in the **Content Browser**, right-click, and choose f
 ## Optimize Mode
 
 Trim transparent pixels from individual textures while preserving sprite pivot positions.
+
+<img src="Images/PivotPreservation_Demo.png" alt="Optimize Mode showing 99% memory savings with pivot preservation" width="800">
+
+*Real example: 6 textures (2048×2048 each) trimmed to their actual content. **32.2 MB → 186 KB memory footprint** (99% savings). **Preserve Pos ✓** keeps sprite visual positions intact — composition in scene never breaks.*
 
 <img src="Images/Optimize_01.png" alt="Optimize — Before" width="700">
 
@@ -187,6 +193,58 @@ Add textures dynamically — drag from Content Browser into the Items panel:
 </p>
 
 *Left: Dragging 7 textures into Items. Right: Items added as Unplaced — use Place All or Analyze to pack.*
+
+---
+
+## Sprite Optimizer Project
+
+Save your editing session as an asset in Content Browser so you can come back to it later.
+
+<img src="Images/Project_Asset_DoubleClick.png" alt="Double-click restores identical state in a second editor window" width="900">
+
+*Double-click a Project asset and the editor opens with everything restored — same layout, same items, same settings. Left window: original session. Right window: freshly opened from the Project asset. Byte-for-byte identical state.*
+
+### Why you'd want this
+
+Before v2.1, the only way to resume editing a saved atlas was to re-import it. That re-detects regions from the atlas texture — slow for large atlases, and any manual tweaks (moves, resizes, rotations) had to be redone.
+
+With the new **Project asset** everything is preserved: the layout you set up, page sizes, trim state per item, checkboxes, and all settings. Double-click the project and you're back exactly where you left off.
+
+### How to use it
+
+**It's automatic.** Every time you run **Create Atlas**, the plugin saves a `_Project.uasset` next to your atlas:
+
+```
+Content/YourFolder/Atlas/
+├── MyAtlas.uasset              ← the atlas texture
+├── MyAtlas_Project.uasset      🆕 ← your editing session (new!)
+├── MyAtlas_Sprite1.uasset      ← sprites (as before)
+└── MyAtlas_Sprite1_MI.uasset   ← material instances (as before)
+```
+
+To reopen an editing session, **double-click the `_Project.uasset`** in Content Browser. The editor opens with your layout restored.
+
+<img src="Images/Project_Asset_ContentBrowser.png" alt="Project asset sitting next to the generated atlas in Content Browser" width="800">
+
+*Content Browser view after Create Atlas: atlas texture + `_Project` asset + sprites + material instances, all in one folder.*
+
+### Saving mid-edit
+
+You can also save your work without running Create Atlas — just press **Save** (or `Ctrl+S`) in the toolbar. Useful for trying out a different layout without losing your current one.
+
+### Open Project shortcut
+
+After Create Atlas finishes, the success notification shows an **"Open Project"** link. Clicking it opens the project in a fresh window — handy when you've been editing a big atlas and want to start with a clean memory state.
+
+### Custom icon
+
+Project assets have their own icon (blue tile with atlas grid + gear) so you can spot them at a glance in Content Browser. Right-click a project and you'll see **"Open Generated Atlas"** which jumps to the atlas that came out of that session.
+
+<p align="center">
+  <img src="Images/Project_Asset_Thumbnail.png" alt="Project asset custom thumbnail" width="400">
+</p>
+
+*Close-up: atlas texture (left) next to its Project asset (right). The blue gear thumbnail makes it unmistakable.*
 
 ---
 
@@ -278,6 +336,31 @@ Two auto-generated parent materials:
 - **User Interface** — for UMG widgets (optimized for 2D UI rendering)
 
 The plugin detects target domain from atlas settings or project context.
+
+---
+
+## Preview Quality
+
+Large atlases with 4K+ source textures can consume a lot of editor memory. The **Preview Quality** setting lets you control that trade-off without changing your exported atlas.
+
+Find it in **Project Settings → Plugins → Sprite Optimizer → Editor Performance**:
+
+| Setting | Use case |
+|---------|----------|
+| **Low** (512 px) | Many 4K+ sources on a machine with limited RAM |
+| **Medium** (1024 px) — default | Recommended for most projects |
+| **High** (2048 px) | Sharper previews when you zoom in a lot |
+| **Full** | No cap — uses full source resolution |
+
+**What it affects:** the preview textures shown on the editor canvas. The final exported atlas **always** uses full source resolution, regardless of this setting.
+
+**Why you might change it:** lower settings dramatically reduce VRAM usage and load time when your source textures are large (4K+). The actual saving depends on your atlas — bigger sources see the biggest wins.
+
+<p align="center">
+  <img src="Images/PreviewQuality_Settings.png" alt="Preview Quality dropdown in Project Settings" width="700">
+</p>
+
+*Where to find it: **Edit → Project Settings → Plugins → Sprite Optimizer → Editor Performance → Preview Quality**.*
 
 ---
 
@@ -375,16 +458,14 @@ Configure defaults in **Project Settings → Plugins → Sprite Optimizer**:
 | Property | Value |
 |----------|-------|
 | Engine Versions | **UE 4.27, and 5.0 through 5.7** |
-| Module Type | Editor Only (EditorNoCommandlet) |
+| Type | Editor-only plugin |
 | Dependencies | Paper2D (standard engine plugin) |
-| Platforms | Win64, Mac, Linux (editor only — runtime game works on all UE targets) |
-| Compression | BC7 for all exported textures (with alpha support) |
+| Platforms | Windows, Mac, Linux |
 | Max Atlas Size | Up to 8192×8192 (configurable) |
-| Packing Optimization | Multi-heuristic with aspect ratio scoring |
-| Progress Tracking | 4-phase progress bars for all heavy operations |
-| Undo System | 50-level undo/redo stack |
-| Runtime Cost | **Zero** — plugin does not load in packaged builds |
-| Asset Modification | **Non-destructive** — original files are never modified |
+| Compression | BC7 with alpha for all exported textures |
+| Runtime Cost | **Zero** — plugin doesn't load in your packaged game |
+| Source Files | **Never modified** — originals are always preserved |
+| Undo/Redo | 50 levels |
 
 ---
 
@@ -392,25 +473,30 @@ Configure defaults in **Project Settings → Plugins → Sprite Optimizer**:
 
 ### Version 2.1 — Cross-Engine Release
 
-**New**
-- Cross-engine support: plugin now works on **Unreal Engine 4.27 and 5.0 through 5.7** (previously UE 5.7 only). Single unified source with a compatibility layer (`SpriteOptimizerCompat.h`) handling all API differences.
-- Plugin-bundled icons: 14 custom PNG icons shipped with the plugin — consistent UI on every engine version, no dependency on engine-provided style assets.
-- Lossless preservation guarantee: explicit documentation that sprite pixels are never scaled, resampled, or filtered.
+**Works on 9 engine versions now**
+- One plugin for **UE 4.27 and 5.0 through 5.7** — previously UE 5.7 only. Migrate your projects between engine versions without rebuilding your atlas pipeline.
+- Consistent UI on every engine — plugin ships with its own icons, no missing buttons on UE 4.27 or future versions.
+
+**New features**
+- **Sprite Optimizer Project** — your editing session now saves as an asset. Double-click it in Content Browser to resume exactly where you left off — no need to re-import the atlas. Saved automatically alongside the atlas every time you export.
+  - Canvas updates immediately on project open (no need to click Analyze first).
+  - Save button reliably creates the Project asset on first click, and Content Browser auto-navigates to show where it went.
+  - Trimmed items keep their correct aspect ratio on reopen (no more stretching).
+  - Settings panel restores your saved values instead of reverting to defaults.
+- **Preview Quality setting** — control editor memory usage by capping preview texture size (Low / Medium / High / Full). Doesn't affect final atlas quality.
+- **Normal maps & HDR textures** — 16-bit source textures (TSF_RGBA16, RGBA16F, G16, BGRE8) that previously rendered empty on canvas now pack correctly.
+- **Refreshed look** — new marketplace logo, cleaner toolbar icons, bigger status dots in the Items panel, custom icon for the Project asset.
+
+**Performance**
+- **Faster project reopen** — source textures now decompress in parallel across CPU cores. The bigger your atlas, the bigger the win.
+- **Lower memory footprint** — Preview Quality keeps editor VRAM usage under control on large atlases.
+- **Accurate memory warnings** — the "High Memory Usage" popup now counts only items actually placed on the canvas, not items you've unplaced.
 
 **Fixed**
-- Crash when regenerating parent materials with cached assets from a previous plugin version. The plugin now validates cached materials and regenerates them automatically if the structure has changed (`IsGeneratedMaterialValid` + `DeleteStaleAsset`).
-- Editor freeze in the Slice Texture dialog at high zoom levels. The checkerboard background now only renders the visible area instead of the entire scaled atlas (previously iterated millions of cells at max zoom).
-- Toolbar not visible on first open in UE 4.27. The toolbar is now explicitly included in the default editor layout (`ToolbarTabId` added to `FTabManager::NewPrimaryArea`).
-- Column visibility toggle between Atlas and Optimize modes on UE 4.27. Columns are now correctly added and removed when switching modes via `SSpriteItemPanel::SetColumnVisible_Legacy`.
-
-**Improved**
-- Defensive asset loading: packages are fully loaded before save (`Package->FullyLoad()` in `SaveCreatedPackage`) to prevent "cannot be saved as it has only been partially loaded" errors.
-- Force-load-before-check in `GetOrCreate*ParentMaterial` — `LoadPackage(..., LOAD_NoWarn | LOAD_Quiet)` ensures `LoadObject` sees a fully-initialized asset, not an AssetRegistry header stub.
-- Icon rendering on UE 4.27: all toolbar buttons now show proper icons (previously some buttons rendered blank because their icon names were UE 5.1+ only).
-
-**Technical**
-- Unified source distribution: single plugin source compiles on all supported engine versions via `#if ENGINE_MAJOR_VERSION / ENGINE_MINOR_VERSION` guards in `SpriteOptimizerCompat.h`.
-- No breaking changes to project assets. Existing atlases, sprites, and material instances continue to work.
+- 16-bit normal maps rendered empty and were missing from the exported atlas.
+- Crash when regenerating cached parent materials from an older plugin version — the plugin now detects and regenerates them automatically.
+- Slice Texture editor freezing at high zoom levels.
+- "Partially loaded package" errors on save — packages are now fully loaded before writing.
 
 ### Version 2.0
 
@@ -427,29 +513,38 @@ Configure defaults in **Project Settings → Plugins → Sprite Optimizer**:
 
 ## Troubleshooting
 
-### "Cannot be saved as it has only been partially loaded"
+### Normal maps or HDR textures look empty in the editor
 
-**Fixed in v2.1.** If you see this error on UE 4.27 with cached materials from an older plugin version:
-- The plugin will automatically detect stale cached assets and regenerate them on next use
-- See `GetOrCreateUVParentMaterial::IsGeneratedMaterialValid` — validates structure against 7 expected scalar parameters + BaseTexture
-- If validation fails, `DeleteStaleAsset` removes the old asset and the material is recreated fresh
+**Fixed in v2.1.** Older versions only supported 8-bit source textures. If your textures are 16-bit (common for normal maps) or HDR, update to v2.1.
 
-### Slice Texture editor lags at high zoom (v2.0 and earlier)
+### Project opens slowly on large atlases
 
-**Fixed in v2.1.** The checkerboard background now only renders the viewport-visible area instead of the entire scaled atlas. Previously at max zoom (10×) on a 2048×2048 atlas, the loop would emit ~1.6M draw calls per frame.
+**Much faster in v2.1.** Parallel loading noticeably speeds up reopening large atlases. If it's still slow on your machine, try lowering **Preview Quality** in Project Settings → Plugins → Sprite Optimizer → Editor Performance.
 
-### Toolbar not visible on UE 4.27 (v2.0 and earlier)
+### Editor runs out of memory
 
-**Fixed in v2.1.** UE 4.27 registers the main toolbar as a dockable tab (`ToolbarTabId`). The default editor layout now explicitly includes this tab as a horizontal top strip, so the toolbar opens automatically on first run.
+**Much better in v2.1.** If you're hitting memory limits with many 4K+ sources, set **Preview Quality** to **Low** (512 px cap). The final atlas quality isn't affected — the cap is for editor preview textures only.
 
-### Plugin fails to compile on UE X.Y
+### Old material errors on UE 4.27 ("partially loaded")
+
+**Fixed in v2.1.** The plugin now detects outdated cached materials from older plugin versions and regenerates them automatically. Just use the plugin as normal — it will heal itself on next use.
+
+### Slice Texture editor lags when zoomed in
+
+**Fixed in v2.1.** The checkerboard background now renders only the visible area.
+
+### Toolbar missing on UE 4.27
+
+**Fixed in v2.1.** The main toolbar is now included in the default layout.
+
+### Plugin fails to compile on a specific UE version
 
 File an issue with:
 - Exact UE version (e.g. "UE 5.3.0")
-- Build log excerpt (look for first red error line)
-- Operating system and VS version
+- Build log excerpt (look for the first red error line)
+- Operating system and Visual Studio version
 
-The compatibility layer covers UE 4.27, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7. Versions 5.1, 5.3, and 5.4 are built by FAB's compile pipeline without local test coverage on our side — issues on these versions are especially valuable to report.
+The plugin covers UE 4.27, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7. Versions 5.3 and 5.4 are verified by FAB's compile pipeline rather than locally — reports on these are especially valuable.
 
 ---
 

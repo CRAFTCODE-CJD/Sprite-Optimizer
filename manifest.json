@@ -1,0 +1,18 @@
+{
+  "slug": "sprite-optimizer",
+  "repo": "Sprite-Optimizer",
+  "name": {
+    "en": "Sprite Optimizer",
+    "ru": "Sprite Optimizer"
+  },
+  "version": "0.0.0",
+  "description": {
+    "en": "Atlas packer and sprite optimizer for Unreal Paper2D projects.",
+    "ru": "Упаковщик атласов и оптимизатор спрайтов для Unreal Paper2D."
+  },
+  "image": "/images/plugins/sprite-optimizer/Atlas_02.png",
+  "video": "",
+  "docs": "https://github.com/CRAFTCODE-CJD/Sprite-Optimizer",
+  "updated": "2026-01-01T00:00:00Z",
+  "accent": "#EC4899"
+}

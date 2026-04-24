@@ -1,0 +1,105 @@
+# ══════════════════════════════════════════════════════
+# CraftCode site — Images sync
+# ══════════════════════════════════════════════════════
+# Mirrors this repo's Images/ into
+#   craftcode-site/public/images/plugins/<slug>/
+# where <slug> is read from this repo's manifest.json.
+#
+# --delete is used: files removed in the plugin repo are removed on
+# the site as well. Cloudflare Pages auto-rebuilds on the resulting
+# craftcode-site push (no deploy hook needed — the git push triggers it).
+# ──────────────────────────────────────────────────────
+name: craftcode-sync-images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Images/**'
+      - 'manifest.json'               # slug could change
+      - '.github/workflows/sync-images.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: sync-images-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout plugin repo
+        uses: actions/checkout@v4
+        with:
+          path: plugin
+
+      - name: Read slug from manifest.json
+        id: slug
+        run: |
+          if [ ! -f plugin/manifest.json ]; then
+            echo "manifest.json missing — cannot determine slug."
+            exit 1
+          fi
+          SLUG=$(jq -r '.slug // empty' plugin/manifest.json)
+          if [ -z "$SLUG" ]; then
+            echo "manifest.json has no .slug field."
+            exit 1
+          fi
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+          echo "Resolved slug: $SLUG"
+
+      - name: Check token
+        env:
+          TOKEN: ${{ secrets.CRAFTCODE_SITE_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::warning ::CRAFTCODE_SITE_TOKEN secret is empty — cannot push to craftcode-site. Skipping."
+            echo "SKIP=1" >> "$GITHUB_ENV"
+          fi
+
+      - name: Checkout craftcode-site
+        if: env.SKIP != '1'
+        uses: actions/checkout@v4
+        with:
+          repository: CRAFTCODE-CJD/craftcode-site
+          token: ${{ secrets.CRAFTCODE_SITE_TOKEN }}
+          path: site
+          fetch-depth: 1
+
+      - name: Rsync Images → site (with delete)
+        if: env.SKIP != '1'
+        env:
+          SLUG: ${{ steps.slug.outputs.slug }}
+        run: |
+          set -e
+          SRC="plugin/Images/"
+          DEST="site/public/images/plugins/$SLUG/"
+          mkdir -p "$DEST"
+          if [ -d "$SRC" ]; then
+            # --delete removes files in DEST that aren't in SRC
+            rsync -av --delete --exclude ".git" "$SRC" "$DEST"
+          else
+            # No Images/ folder → wipe the mirror
+            rm -rf "$DEST"
+            mkdir -p "$DEST"
+          fi
+          echo "Files after sync:"
+          ls -la "$DEST" || true
+
+      - name: Commit and push if changed
+        if: env.SKIP != '1'
+        working-directory: site
+        env:
+          SLUG: ${{ steps.slug.outputs.slug }}
+        run: |
+          set -e
+          git add "public/images/plugins/$SLUG/"
+          if git diff --cached --quiet; then
+            echo "No image changes to push."
+            exit 0
+          fi
+          git config user.name  "craftcode-site-sync[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "chore(images): sync $SLUG from plugin repo"
+          git push
+          echo "Pushed image updates → Cloudflare will rebuild automatically."

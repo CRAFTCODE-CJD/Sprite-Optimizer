@@ -12,12 +12,7 @@
   },
   "image": "/images/plugins/sprite-optimizer/Atlas_02.png",
   "video": "",
-<<<<<<< Updated upstream
-  "docs": "https://github.com/CRAFTCODE-CJD/Sprite-Optimizer",
-  "updated": "2026-04-24T00:32:44Z",
-=======
   "docs": "https://craftcode-site.pages.dev/plugins/sprite-optimizer/",
-  "updated": "2026-04-23T23:39:46Z",
->>>>>>> Stashed changes
+  "updated": "2026-04-24T00:32:44Z",
   "accent": "#EC4899"
 }

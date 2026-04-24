@@ -76,10 +76,12 @@ jobs:
           mv manifest.tmp.json manifest.json
 
       - name: Commit if changed
+        id: commit
         if: steps.read.outputs.skip != 'true'
         run: |
           if git diff --quiet -- manifest.json; then
             echo "No manifest changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name  "github-actions[bot]"
@@ -87,3 +89,22 @@ jobs:
           git add manifest.json
           git commit -m "chore(manifest): bump version/updated [skip ci]"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger craftcode-site rebuild
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "CLOUDFLARE_DEPLOY_HOOK secret is empty — skipping site rebuild trigger."
+            exit 0
+          fi
+          # Deploy hook accepts a plain POST; body is ignored.
+          HTTP=$(curl -s -o /tmp/hook.out -w "%{http_code}" -X POST "$HOOK")
+          echo "HTTP $HTTP"
+          cat /tmp/hook.out
+          if [ "$HTTP" -ge 400 ]; then
+            echo "Deploy hook POST failed with HTTP $HTTP"
+            exit 1
+          fi

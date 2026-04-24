@@ -5,14 +5,19 @@
     "en": "Sprite Optimizer",
     "ru": "Sprite Optimizer"
   },
-  "version": "0.0.0",
+  "version": "2.1.0",
   "description": {
-    "en": "Atlas packer and sprite optimizer for Unreal Paper2D projects.",
-    "ru": "Упаковщик атласов и оптимизатор спрайтов для Unreal Paper2D."
+    "en": "Atlas packer, pixel-perfect trimming, reversible sessions and reverse-engineering — for Unreal Engine Paper2D (UE 4.27 — 5.7).",
+    "ru": "Пакинг атласов, pixel-perfect обрезка, возобновляемые сессии и реверс-инжиниринг — для Unreal Paper2D (UE 4.27 — 5.7)."
   },
   "image": "/images/plugins/sprite-optimizer/Atlas_02.png",
   "video": "",
+<<<<<<< Updated upstream
   "docs": "https://github.com/CRAFTCODE-CJD/Sprite-Optimizer",
   "updated": "2026-04-24T00:32:44Z",
+=======
+  "docs": "https://craftcode-site.pages.dev/plugins/sprite-optimizer/",
+  "updated": "2026-04-23T23:39:46Z",
+>>>>>>> Stashed changes
   "accent": "#EC4899"
 }
